@@ -39,7 +39,7 @@ check_fail2ban_installed() {
 
 # Funktion zur Installation von Fail2Ban und Konfiguration
 install_fail2ban() {
-  echo -e "${BLUE}Schritt 12: Installiere Fail2Ban und richte eine Grundkonfiguration ein.${RESET}"
+  echo -e "${BLUE}Schritt 13: Installiere Fail2Ban und richte eine Grundkonfiguration ein.${RESET}"
   sudo apt-get install fail2ban -y > /dev/null 2>&1
 
   # Erstellen Sie eine einfache Konfigurationsdatei für Fail2Ban.
@@ -59,7 +59,7 @@ EOF
   sudo systemctl start fail2ban > /dev/null 2>&1
   sudo systemctl restart fail2ban > /dev/null 2>&1
 
-  echo -e "${BLUE}Schritt 12: Fail2Ban wurde installiert und konfiguriert.${RESET}"
+  echo -e "${BLUE}Schritt 13: Fail2Ban wurde installiert und konfiguriert.${RESET}"
 }
 
 # Funktion für die Pausen
@@ -196,6 +196,28 @@ else
   sudo apt-get install -y "$package_name" > /dev/null 2>&1
   echo -e "${BLUE}Schritt 11: Installation von $package_name abgeschlossen.${RESET}"
 fi
+pause
+
+# Setze die Zeitzone auf Berlin
+echo -e "${BLUE}Schritt 12:Setze die Zeitzone auf Berlin...${RESET}"
+sudo timedatectl set-timezone Europe/Berlin > /dev/null 2>&1
+
+# Aktualisiere die NTP-Konfiguration, um deutsche Zeitserver zu verwenden
+echo -e "${BLUE}Schritt 12:Aktualisiere die NTP-Konfiguration...${RESET}"
+cat <<EOL | sudo tee /etc/systemd/timesyncd.conf > /dev/null
+[Time]
+NTP=de.pool.ntp.org
+FallbackNTP=0.debian.pool.ntp.org 1.debian.pool.ntp.org 2.debian.pool.ntp.org 3.debian.pool.ntp.org
+RootDistanceMaxSec=5
+PollIntervalMinSec=32
+PollIntervalMaxSec=2048
+EOL
+
+# Aktiviere und starte den systemd-timesyncd-Dienst
+sudo systemctl enable systemd-timesyncd > /dev/null 2>&1
+sudo systemctl start systemd-timesyncd > /dev/null 2>&1
+
+echo -e "${BLUE}Schritt 12:Zeitzone und NTP-Konfiguration aktualisiert.${RESET}"
 pause
 
 # Überprüfen, ob Fail2Ban installiert ist
