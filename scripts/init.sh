@@ -23,12 +23,12 @@ echo "Schritt 3: Bereinigung abgeschlossen."
 
 # Installiert das Paket linux-virtual und alle empfohlenen Pakete
 echo "Schritt 4: Installiere das Paket linux-virtual und empfohlene Pakete..."
-sudo apt install --install-recommends -y linux-virtual
+sudo apt install --install-recommends -y linux-virtual > /dev/null 2>&1
 echo "Schritt 4: Installation abgeschlossen."
 
 # Installiert die Pakete linux-tools-virtual und linux-cloud-tools-virtual
 echo "Schritt 5: Installiere die Pakete linux-tools-virtual und linux-cloud-tools-virtual..."
-sudo apt install -y linux-tools-virtual linux-cloud-tools-virtual
+sudo apt install -y linux-tools-virtual linux-cloud-tools-virtual > /dev/null 2>&1
 echo "Schritt 5: Installation abgeschlossen."
 
 # Ersetzt die Zeile GRUB_CMDLINE_LINUX_DEFAULT in der Datei /etc/default/grub
@@ -58,7 +58,7 @@ echo "Schritt 10: Aktualisierung abgeschlossen."
 
 # Installiert das Paket qemu-guest-agent
 echo "Schritt 11: Installiere das Paket qemu-guest-agent..."
-sudo apt install -y qemu-guest-agent
+sudo apt install -y qemu-guest-agent > /dev/null 2>&1
 echo "Schritt 11: Installation abgeschlossen."
 
 # Benutzerabfrage, ob das System heruntergefahren werden soll
