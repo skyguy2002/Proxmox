@@ -7,7 +7,7 @@ echo "Schritt 1: Aktualisierung abgeschlossen."
 
 # Führt ein Upgrade der installierten Pakete durch und zeigt dabei die Pakete an, die aktualisiert werden
 echo "Schritt 2: Führe ein Upgrade der installierten Pakete durch..."
-sudo apt upgrade -Y > /dev/null 2>&1
+sudo apt upgrade -Y
 echo "Schritt 2: Upgrade abgeschlossen."
 
 # Entfernt nicht mehr benötigte Pakete
