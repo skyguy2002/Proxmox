@@ -57,14 +57,6 @@ EOF
   echo -e "${BLUE}Schritt 12: Fail2Ban wurde installiert und konfiguriert.${RESET}"
 }
 
-response=$?
-case $response in
-   0)
-     install_fail2ban ;; # Benutzer hat "Ja" ausgewählt, Fail2Ban wird installiert und konfiguriert
-   1) echo -e "${GREEN}Fail2Ban wird nicht installiert.${RESET}" ;; # Benutzer hat "Nein" ausgewählt, das Skript wird fortgesetzt
-   255) echo -e "${YELLOW}Abbruch.${RESET}" ;; # Benutzer hat Abbruch ausgewählt
-esac
-
 # Funktion für die Pausen
 pause() {
   sleep 2 # 2 Sekunden Pause
