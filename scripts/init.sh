@@ -32,6 +32,42 @@ RESET='\e[0m'
 # Fragt am Anfang nach dem Sudo-Passwort und aktiviert den Sudo-Cache
 sudo echo "Sudo-Cache aktiviert."
 
+# Funktion zur Installation von Fail2Ban und Konfiguration
+install_fail2ban() {
+  echo -e "${BLUE}Schritt 12: Installiere Fail2Ban und richte eine Grundkonfiguration ein.${RESET}"
+  sudo apt-get install fail2ban -y > /dev/null 2>&1
+
+  # Erstellen Sie eine einfache Konfigurationsdatei für Fail2Ban.
+  cat <<EOF | sudo tee /etc/fail2ban/jail.local
+[DEFAULT]
+ignoreip = 127.0.0.1/8 192.168.0.0/16
+bantime = 600
+findtime = 600
+maxretry = 3
+
+[sshd]
+enabled = true
+EOF
+
+  # Aktiviere den Fail2Ban-Dienst und starte ihn.
+  sudo systemctl enable fail2ban > /dev/null 2>&1
+  sudo systemctl start fail2ban > /dev/null 2>&1
+  sudo systemctl restart fail2ban > /dev/null 2>&1
+
+  echo -e "${BLUE}Schritt 12: Fail2Ban wurde installiert und konfiguriert.${RESET}"
+}
+
+# Benutzerabfrage, ob Fail2Ban installiert werden soll
+dialog --title "Fail2Ban Installation" --yesno "Möchten Sie Fail2Ban installieren und konfigurieren? Dies hilft bei der Sicherung Ihres Servers, indem fehlgeschlagene Anmeldeversuche überwacht werden." 0 0
+
+response=$?
+case $response in
+   0)
+     install_fail2ban ;; # Benutzer hat "Ja" ausgewählt, Fail2Ban wird installiert und konfiguriert
+   1) echo -e "${GREEN}Fail2Ban wird nicht installiert.${RESET}" ;; # Benutzer hat "Nein" ausgewählt, das Skript wird fortgesetzt
+   255) echo -e "${YELLOW}Abbruch.${RESET}" ;; # Benutzer hat Abbruch ausgewählt
+esac
+
 # Funktion für die Pausen
 pause() {
   sleep 2 # 2 Sekunden Pause
@@ -146,6 +182,17 @@ else
   echo -e "${BLUE}Schritt 11: Installation von $package_name abgeschlossen.${RESET}"
 fi
 pause
+
+# Benutzerabfrage, ob Fail2Ban installiert werden soll
+dialog --title "Fail2Ban Installation" --yesno "Möchten Sie Fail2Ban installieren und konfigurieren? Dies hilft bei der Sicherung Ihres Servers, indem fehlgeschlagene Anmeldeversuche überwacht werden." 0 0
+
+response=$?
+case $response in
+   0)
+     install_fail2ban ;; # Benutzer hat "Ja" ausgewählt, Fail2Ban wird installiert und konfiguriert
+   1) echo -e "${GREEN}Fail2Ban wird nicht installiert.${RESET}" ;; # Benutzer hat "Nein" ausgewählt, das Skript wird fortgesetzt
+   255) echo -e "${YELLOW}Abbruch.${RESET}" ;; # Benutzer hat Abbruch ausgewählt
+esac
 
 echo -e "${GREEN}===== Skript abgeschlossen =====${RESET}"
 pause
