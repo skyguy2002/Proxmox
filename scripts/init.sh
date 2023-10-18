@@ -49,7 +49,7 @@ is_package_installed() {
 echo -e "${GREEN}===== Grundinstallation einer Proxmox VM =====${RESET}"
 # Führt ein Update der Paketquellen durch
 echo -e "${BLUE}Schritt 1: Aktualisiere die Paketquellen...${RESET}"
-sudo apt update > /dev/null 2>&1
+sudo apt-get update > /dev/null 2>&1
 echo -e "${BLUE}Schritt 1: Aktualisierung abgeschlossen.${RESET}"
 pause
 
@@ -57,13 +57,13 @@ pause
 export DEBIAN_FRONTEND=noninteractive
 
 # Zeigt die Anzahl der zu aktualisierenden Pakete an (ohne das Upgrade durchzuführen)
-update_count=$(sudo apt -s upgrade | grep "aktualisiert,")
+update_count=$(sudo apt-get -s upgrade | grep "aktualisiert,")
 echo -e "${BLUE}Schritt 2: Anzahl der zu aktualisierenden Pakete: $update_count ${RESET}"
 pause
 
 # Führt ein Upgrade der installierten Pakete durch und zeigt dabei die Pakete an, die aktualisiert werden
 echo -e "${BLUE}Schritt 2: Aktualisiert die Pakete...${RESET}"
-sudo apt upgrade -y > /dev/null 2>&1
+sudo apt-get upgrade -y > /dev/null 2>&1
 echo -e "${BLUE}Schritt 2: Upgrade abgeschlossen.${RESET}"
 pause
 
@@ -72,7 +72,7 @@ unset DEBIAN_FRONTEND
 
 # Entfernt nicht mehr benötigte Pakete
 echo -e "${BLUE}Schritt 3: Entferne nicht mehr benötigte Pakete...${RESET}"
-sudo apt autoremove > /dev/null 2>&1
+sudo apt-get autoremove > /dev/null 2>&1
 echo -e "${BLUE}Schritt 3: Bereinigung abgeschlossen.${RESET}"
 pause
 
@@ -82,7 +82,7 @@ if is_package_installed "$package_name"; then
   echo -e "${BLUE}Schritt 2: Paket $package_name ist bereits vorhanden.${RESET}"
 else
   echo -e "${BLUE}Schritt 2: Installiere das Paket $package_name und empfohlene Pakete...${RESET}"
-  sudo apt install --install-recommends -y "$package_name" > /dev/null 2>&1
+  sudo apt-get install --install-recommends -y "$package_name" > /dev/null 2>&1
   echo -e "${BLUE}Schritt 2: Installation abgeschlossen.${RESET}"
 fi
 pause
@@ -94,7 +94,7 @@ for package_name in "${package_names[@]}"; do
     echo -e "${BLUE}Schritt 3: Paket $package_name ist bereits vorhanden.${RESET}"
   else
     echo -e "${BLUE}Schritt 3: Installiere das Paket $package_name...${RESET}"
-    sudo apt install -y "$package_name"  > /dev/null 2>&1
+    sudo apt-get install -y "$package_name"  > /dev/null 2>&1
     echo -e "${BLUE}Schritt 3: Installation abgeschlossen.${RESET}"
   fi
   pause
@@ -126,7 +126,7 @@ pause
 
 # Führt ein erneutes Update der Paketquellen durch
 echo -e "${BLUE}Schritt 10: Erneuere die Paketquellen...${RESET}"
-sudo apt update > /dev/null 2>&1
+sudo apt-get update > /dev/null 2>&1
 echo -e "${BLUE}Schritt 10: Aktualisierung abgeschlossen.${RESET}"
 pause
 
@@ -136,7 +136,7 @@ if is_package_installed "$package_name"; then
   echo -e "${BLUE}Schritt 11: Paket $package_name ist bereits installiert.${RESET}"
 else
   echo -e "${BLUE}Schritt 11: Installiere das Paket $package_name...${RESET}"
-  sudo apt install -y "$package_name" > /dev/null 2>&1
+  sudo apt-get install -y "$package_name" > /dev/null 2>&1
   echo -e "${BLUE}Schritt 11: Installation von $package_name abgeschlossen.${RESET}"
 fi
 pause
