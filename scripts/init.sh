@@ -150,6 +150,9 @@ dialog --title "QEMU-Agent in Proxmox aktivieren" --msgbox "Bitte stellen Sie si
 
 # Benutzerabfrage, ob das System heruntergefahren werden soll
 echo -e "${GREEN}===== Skript abgeschlossen =====${RESET}"
+pause
+pause
+pause
 dialog --title "Skript abgeschlossen" --yesno "Das Skript wurde abgeschlossen. Möchten Sie das System herunterfahren?" 0 0
 
 # Überprüft die Antwort auf die Benutzerabfrage
@@ -157,6 +160,7 @@ response=$?
 case $response in
    0)
      echo -e "${YELLOW}Der Server wird heruntergefahren.${RESET}"
+     clear
      sudo shutdown -h now ;; # Benutzer hat "Ja" ausgewählt, das System wird heruntergefahren
    1) 
      echo -e "${GREEN}Das System bleibt eingeschaltet.${RESET}" ;; # Benutzer hat "Nein" ausgewählt, das Skript wird beendet
