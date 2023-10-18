@@ -188,6 +188,7 @@ echo -e "${BLUE}Schritt 10: Aktualisierung abgeschlossen.${RESET}"
 pause
 
 # Überprüfen, ob das Paket qemu-guest-agent bereits installiert ist
+echo -e "${BLUE}Schritt 11: Überprüfe auf Qemu Guest Agent....${RESET}"
 package_name="qemu-guest-agent"
 if is_package_installed "$package_name"; then
   echo -e "${YELLOW}Schritt 11: Paket $package_name ist bereits installiert.${RESET}"
