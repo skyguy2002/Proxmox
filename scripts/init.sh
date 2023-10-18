@@ -83,11 +83,11 @@ pause
 # Installiert das Paket linux-virtual und alle empfohlenen Pakete
 package_name="linux-virtual"
 if is_package_installed "$package_name"; then
-  echo -e "${BLUE}Schritt 2: Paket $package_name ist bereits vorhanden.${RESET}"
+  echo -e "${YELLOW}Schritt 4: Paket $package_name ist bereits vorhanden.${RESET}"
 else
-  echo -e "${BLUE}Schritt 2: Installiere das Paket $package_name und empfohlene Pakete...${RESET}"
+  echo -e "${BLUE}Schritt 4: Installiere das Paket $package_name und empfohlene Pakete...${RESET}"
   sudo apt-get install --install-recommends -y "$package_name" > /dev/null 2>&1
-  echo -e "${BLUE}Schritt 2: Installation abgeschlossen.${RESET}"
+  echo -e "${BLUE}Schritt 4: Installation abgeschlossen.${RESET}"
 fi
 pause
 
@@ -95,30 +95,30 @@ pause
 package_names=("linux-tools-virtual" "linux-cloud-tools-virtual" "dialog")
 for package_name in "${package_names[@]}"; do
   if is_package_installed "$package_name"; then
-    echo -e "${BLUE}Schritt 3: Paket $package_name ist bereits vorhanden.${RESET}"
+    echo -e "${YELLOW}Schritt 5: Paket $package_name ist bereits vorhanden.${RESET}"
   else
-    echo -e "${BLUE}Schritt 3: Installiere das Paket $package_name...${RESET}"
+    echo -e "${BLUE}Schritt 5: Installiere das Paket $package_name...${RESET}"
     sudo apt-get install -y "$package_name"  > /dev/null 2>&1
-    echo -e "${BLUE}Schritt 3: Installation abgeschlossen.${RESET}"
+    echo -e "${BLUE}Schritt 5: Installation abgeschlossen.${RESET}"
   fi
   pause
 done
 
 # Ersetzt die Zeile GRUB_CMDLINE_LINUX_DEFAULT in der Datei /etc/default/grub
 echo -e "${BLUE}Schritt 6: Passe die GRUB-Konfiguration an...${RESET}"
-sudo sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT=""/GRUB_CMDLINE_LINUX_DEFAULT="elevator=noop"/' /etc/default/grub
+sudo sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT=""/GRUB_CMDLINE_LINUX_DEFAULT="elevator=noop"/' /etc/default/grub > /dev/null 2>&1
 echo -e "${BLUE}Schritt 6: Anpassung abgeschlossen.${RESET}"
 pause
 
 # Aktualisiert GRUB
 echo -e "${BLUE}Schritt 7: Aktualisiere GRUB...${RESET}"
-sudo update-grub
+sudo update-grub > /dev/null 2>&1
 echo -e "${BLUE}Schritt 7: Aktualisierung abgeschlossen.${RESET}"
 pause
 
 # Ändert die After-Zeile in der Datei hv-kvp-daemon.service
 echo -e "${BLUE}Schritt 8: Passe die Datei hv-kvp-daemon.service an...${RESET}"
-sudo sed -i 's/^After=.*/After=systemd-remount-fs.service/' /etc/systemd/system/multi-user.target.wants/hv-kvp-daemon.service
+sudo sed -i 's/^After=.*/After=systemd-remount-fs.service/' /etc/systemd/system/multi-user.target.wants/hv-kvp-daemon.service > /dev/null 2>&1
 echo -e "${BLUE}Schritt 8: Anpassung abgeschlossen.${RESET}"
 pause
 
@@ -137,7 +137,7 @@ pause
 # Überprüfen, ob das Paket qemu-guest-agent bereits installiert ist
 package_name="qemu-guest-agent"
 if is_package_installed "$package_name"; then
-  echo -e "${BLUE}Schritt 11: Paket $package_name ist bereits installiert.${RESET}"
+  echo -e "${YELLOW}Schritt 11: Paket $package_name ist bereits installiert.${RESET}"
 else
   echo -e "${BLUE}Schritt 11: Installiere das Paket $package_name...${RESET}"
   sudo apt-get install -y "$package_name" > /dev/null 2>&1
