@@ -5,6 +5,13 @@
 # License: MIT
 # https://github.com/skyguy2002/Proxmox/raw/main/LICENSE
 
+# Setze die Farben für die Ausgabe
+GREEN='\e[32m'
+BLUE='\e[34m'
+CYAN='\e[36m'
+YELLOW='\e[33m'
+RESET='\e[0m'
+
 # Funktion zur Anzeige der Hilfe
 show_help() {
   GREEN='\e[32m'
@@ -20,22 +27,6 @@ show_help() {
   echo -e "${CYAN}  ./scriptname help or ?    - Zeigt diese Hilfe an.${RESET}"
   exit 0
 }
-
-
-# Prüfe, ob der Parameter "?" oder "help" übergeben wurde
-if [ "$1" = "?" ] || [ "$1" = "help" ]; then
-  show_help
-fi
-
-# Setze die Farben für die Ausgabe
-GREEN='\e[32m'
-BLUE='\e[34m'
-CYAN='\e[36m'
-YELLOW='\e[33m'
-RESET='\e[0m'
-
-# Fragt am Anfang nach dem Sudo-Passwort und aktiviert den Sudo-Cache
-sudo echo "Sudo-Cache aktiviert."
 
 # Funktion zur Installation von Fail2Ban und Konfiguration
 install_fail2ban() {
@@ -76,6 +67,32 @@ is_package_installed() {
     return 1
   fi
 }
+
+# Funktion zur Überprüfung und Durchführung von 'apt-get autoremove'
+autoremove() {
+  echo -e "${BLUE}Schritt 3: Überprüfe, ob Pakete zum Entfernen verfügbar sind.${RESET}"
+  autoremove_output=$(sudo apt-get autoremove -s > /dev/null 2>&1)
+
+  if [[ "$autoremove_output" == *"Die folgenden Pakete werden entfernt"* ]]; then
+    echo -e "${BLUE}Schritt 3: Bereinigung wird durchgeführt, um ungenutzte Pakete zu entfernen.${RESET}"
+    sudo apt-get autoremove -y > /dev/null 2>&1
+    echo -e "${BLUE}Schritt 3: Bereinigung abgeschlossen.${RESET}"
+  else
+    echo -e "${YELLOW}Keine Pakete zum Entfernen gefunden. Der Schritt 3 wird übersprungen.${RESET}"
+  fi
+}
+
+
+#==============Ab hier startet das Skript==============
+
+# Prüfe, ob der Parameter "?" oder "help" übergeben wurde
+if [ "$1" = "?" ] || [ "$1" = "help" ]; then
+  show_help
+fi
+
+# Fragt am Anfang nach dem Sudo-Passwort und aktiviert den Sudo-Cache
+sudo echo "Sudo-Cache aktiviert."
+
 echo -e "${GREEN}===== Grundinstallation einer Proxmox VM =====${RESET}"
 # Führt ein Update der Paketquellen durch
 echo -e "${BLUE}Schritt 1: Aktualisiere die Paketquellen...${RESET}"
@@ -103,11 +120,8 @@ fi
 # Lösche die DEBIAN_FRONTEND-Umgebungsvariable
 unset DEBIAN_FRONTEND
 
-# Entfernt nicht mehr benötigte Pakete
-echo -e "${BLUE}Schritt 3: Entferne nicht mehr benötigte Pakete...${RESET}"
-sudo apt-get autoremove -y > /dev/null 2>&1
-echo -e "${BLUE}Schritt 3: Bereinigung abgeschlossen.${RESET}"
-pause
+# Aufruf der autoremove-Funktion
+autoremove
 
 # Installiert das Paket linux-virtual und alle empfohlenen Pakete
 package_name="linux-virtual"
