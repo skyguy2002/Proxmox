@@ -153,12 +153,9 @@ response=$?
 case $response in
    0)
      echo -e "${YELLOW}Der Server wird heruntergefahren.${RESET}"
-     pause
-     pause
      sudo shutdown -h now ;; # Benutzer hat "Ja" ausgewählt, das System wird heruntergefahren
    1) 
      echo -e "${GREEN}Das System bleibt eingeschaltet.${RESET}" ;; # Benutzer hat "Nein" ausgewählt, das Skript wird beendet
-     pause
    255) echo -e "${YELLOW}Abbruch.${RESET}" ;; # Benutzer hat Abbruch ausgewählt
 esac
 
