@@ -231,7 +231,7 @@ case $response in
   0)
     echo -e "${YELLOW}Autoupdate wird aktiviert.${RESET}"
     sudo mkdir -p /opt/update/
-    sudo curl -o /opt/update/update-script.sh https://test.test/update-script.sh
+    sudo curl -o /opt/update/update-script.sh https://raw.githubusercontent.com/skyguy2002/Proxmox/main/scripts/update-script.sh
     chmod +x /opt/update/update-script.sh
     (crontab -l ; echo "0 0 * * 6 /opt/update/update-script.sh") | crontab -
     echo -e "${BLUE}Autoupdate aktiviert.${RESET}"
