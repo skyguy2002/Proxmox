@@ -5,6 +5,16 @@ pause() {
   sleep 2 # 2 Sekunden Pause
 }
 
+# Überprüfung, ob ein Paket bereits installiert ist
+is_package_installed() {
+  local package_name="$1"
+  if dpkg -l | grep -q "^ii  $package_name "; then
+    return 0
+  else
+    return 1
+  fi
+}
+
 # Führt ein Update der Paketquellen durch
 echo "Schritt 1: Aktualisiere die Paketquellen..."
 sudo apt update > /dev/null 2>&1
@@ -30,16 +40,28 @@ echo "Schritt 3: Bereinigung abgeschlossen."
 pause
 
 # Installiert das Paket linux-virtual und alle empfohlenen Pakete
-echo "Schritt 4: Installiere das Paket linux-virtual und empfohlene Pakete..."
-sudo apt install --install-recommends -y linux-virtual > /dev/null 2>&1
-echo "Schritt 4: Installation abgeschlossen."
+package_name="linux-virtual"
+if is_package_installed "$package_name"; then
+  echo "Schritt 2: Paket $package_name ist bereits vorhanden."
+else
+  echo "Schritt 2: Installiere das Paket $package_name und empfohlene Pakete..."
+  sudo apt install --install-recommends -y "$package_name" > /dev/null 2>&1
+  echo "Schritt 2: Installation abgeschlossen."
+fi
 pause
 
 # Installiert die Pakete linux-tools-virtual und linux-cloud-tools-virtual
-echo "Schritt 5: Installiere die Pakete linux-tools-virtual und linux-cloud-tools-virtual..."
-sudo apt install -y linux-tools-virtual linux-cloud-tools-virtual > /dev/null 2>&1
-echo "Schritt 5: Installation abgeschlossen."
-pause
+package_names=("linux-tools-virtual" "linux-cloud-tools-virtual")
+for package_name in "${package_names[@]}"; do
+  if is_package_installed "$package_name"; then
+    echo "Schritt 3: Paket $package_name ist bereits vorhanden."
+  else
+    echo "Schritt 3: Installiere das Paket $package_name..."
+    sudo apt install -y "$package_name"  > /dev/null 2>&1
+    echo "Schritt 3: Installation abgeschlossen."
+  fi
+  pause
+done
 
 # Ersetzt die Zeile GRUB_CMDLINE_LINUX_DEFAULT in der Datei /etc/default/grub
 echo "Schritt 6: Passe die GRUB-Konfiguration an..."
@@ -80,6 +102,9 @@ pause
 # Benutzerabfrage, ob das System heruntergefahren werden soll
 echo "Schritt 12: Skript abgeschlossen."
 dialog --title "Skript abgeschlossen" --yesno "Das Skript wurde abgeschlossen. Möchten Sie das System herunterfahren?" 10 50
+
+# Lösche das Konsolenfenster nach dem Dialog
+clear
 
 # Überprüft die Antwort auf die Benutzerabfrage
 response=$?
