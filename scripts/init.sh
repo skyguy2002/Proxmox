@@ -1,9 +1,15 @@
 #!/bin/bash
 
+# Funktion für die Pausen
+pause() {
+  sleep 2 # 2 Sekunden Pause
+}
+
 # Führt ein Update der Paketquellen durch
 echo "Schritt 1: Aktualisiere die Paketquellen..."
 sudo apt update > /dev/null 2>&1
 echo "Schritt 1: Aktualisierung abgeschlossen."
+pause
 
 # Setze die Umgebungsvariable DEBIAN_FRONTEND auf noninteractive
 export DEBIAN_FRONTEND=noninteractive
@@ -12,6 +18,7 @@ export DEBIAN_FRONTEND=noninteractive
 echo "Schritt 2: Führe ein Upgrade der installierten Pakete durch..."
 sudo apt upgrade -y > /dev/null 2>&1
 echo "Schritt 2: Upgrade abgeschlossen."
+pause
 
 # Lösche die DEBIAN_FRONTEND-Umgebungsvariable
 unset DEBIAN_FRONTEND
@@ -20,46 +27,55 @@ unset DEBIAN_FRONTEND
 echo "Schritt 3: Entferne nicht mehr benötigte Pakete..."
 sudo apt autoremove > /dev/null 2>&1
 echo "Schritt 3: Bereinigung abgeschlossen."
+pause
 
 # Installiert das Paket linux-virtual und alle empfohlenen Pakete
 echo "Schritt 4: Installiere das Paket linux-virtual und empfohlene Pakete..."
 sudo apt install --install-recommends -y linux-virtual > /dev/null 2>&1
 echo "Schritt 4: Installation abgeschlossen."
+pause
 
 # Installiert die Pakete linux-tools-virtual und linux-cloud-tools-virtual
 echo "Schritt 5: Installiere die Pakete linux-tools-virtual und linux-cloud-tools-virtual..."
 sudo apt install -y linux-tools-virtual linux-cloud-tools-virtual > /dev/null 2>&1
 echo "Schritt 5: Installation abgeschlossen."
+pause
 
 # Ersetzt die Zeile GRUB_CMDLINE_LINUX_DEFAULT in der Datei /etc/default/grub
 echo "Schritt 6: Passe die GRUB-Konfiguration an..."
 sudo sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT=""/GRUB_CMDLINE_LINUX_DEFAULT="elevator=noop"/' /etc/default/grub
 echo "Schritt 6: Anpassung abgeschlossen."
+pause
 
 # Aktualisiert GRUB
 echo "Schritt 7: Aktualisiere GRUB..."
 sudo update-grub
 echo "Schritt 7: Aktualisierung abgeschlossen."
+pause
 
 # Ändert die After-Zeile in der Datei hv-kvp-daemon.service
 echo "Schritt 8: Passe die Datei hv-kvp-daemon.service an..."
 sudo sed -i 's/^After=.*/After=systemd-remount-fs.service/' /etc/systemd/system/multi-user.target.wants/hv-kvp-daemon.service
 echo "Schritt 8: Anpassung abgeschlossen."
+pause
 
 # Aktualisiert die systemd-Dienstkonfiguration
 echo "Schritt 9: Aktualisiere die systemd-Dienstkonfiguration..."
 sudo systemctl daemon-reload
 echo "Schritt 9: Aktualisierung abgeschlossen."
+pause
 
 # Führt ein erneutes Update der Paketquellen durch
 echo "Schritt 10: Erneuere die Paketquellen..."
 sudo apt update > /dev/null 2>&1
 echo "Schritt 10: Aktualisierung abgeschlossen."
+pause
 
 # Installiert das Paket qemu-guest-agent
 echo "Schritt 11: Installiere das Paket qemu-guest-agent..."
 sudo apt install -y qemu-guest-agent > /dev/null 2>&1
 echo "Schritt 11: Installation abgeschlossen."
+pause
 
 # Benutzerabfrage, ob das System heruntergefahren werden soll
 echo "Schritt 12: Skript abgeschlossen."
