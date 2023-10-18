@@ -28,6 +28,15 @@ show_help() {
   exit 0
 }
 
+# Funktion zur Überprüfung, ob Fail2Ban installiert ist
+check_fail2ban_installed() {
+  if dpkg -l | grep -q "fail2ban"; then
+    fail2ban_installed=true
+  else
+    fail2ban_installed=false
+  fi
+}
+
 # Funktion zur Installation von Fail2Ban und Konfiguration
 install_fail2ban() {
   echo -e "${BLUE}Schritt 12: Installiere Fail2Ban und richte eine Grundkonfiguration ein.${RESET}"
@@ -124,6 +133,7 @@ unset DEBIAN_FRONTEND
 autoremove
 
 # Installiert das Paket linux-virtual und alle empfohlenen Pakete
+echo -e "${BLUE}Schritt 4: Linux Virtual Treiber werden installiert....${RESET}"
 package_name="linux-virtual"
 if is_package_installed "$package_name"; then
   echo -e "${YELLOW}Schritt 4: Paket $package_name ist bereits vorhanden.${RESET}"
@@ -134,9 +144,8 @@ else
 fi
 pause
 
-echo -e "${BLUE}Schritt 5: Weitere Pakete werden installiert....${RESET}"
-
 # Installiert die Pakete linux-tools-virtual und linux-cloud-tools-virtual
+echo -e "${BLUE}Schritt 5: Weitere Pakete werden installiert....${RESET}"
 package_names=("linux-tools-virtual" "linux-cloud-tools-virtual" "dialog")
 for package_name in "${package_names[@]}"; do
   if is_package_installed "$package_name"; then
@@ -190,8 +199,14 @@ else
 fi
 pause
 
-# Benutzerabfrage, ob Fail2Ban installiert werden soll
-dialog --title "Fail2Ban Installation" --yesno "Möchten Sie Fail2Ban installieren und konfigurieren? Dies hilft bei der Sicherung Ihres Servers, indem fehlgeschlagene Anmeldeversuche überwacht werden." 0 0
+# Überprüfen, ob Fail2Ban installiert ist
+check_fail2ban_installed
+
+if $fail2ban_installed; then
+  echo -e "${YELLOW}Fail2Ban ist bereits installiert. Die Installation wird übersprungen.${RESET}"
+else
+  # Benutzerabfrage, ob Fail2Ban installiert werden soll
+  dialog --title "Fail2Ban Installation" --yesno "Möchten Sie Fail2Ban installieren und konfigurieren? Dies hilft bei der Sicherung Ihres Servers, indem fehlgeschlagene Anmeldeversuche überwacht werden." 0 0
 
 response=$?
 case $response in
