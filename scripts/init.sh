@@ -100,7 +100,7 @@ unset DEBIAN_FRONTEND
 
 # Entfernt nicht mehr benötigte Pakete
 echo -e "${BLUE}Schritt 3: Entferne nicht mehr benötigte Pakete...${RESET}"
-sudo apt-get autoremove > /dev/null 2>&1
+sudo apt-get autoremove -y > /dev/null 2>&1
 echo -e "${BLUE}Schritt 3: Bereinigung abgeschlossen.${RESET}"
 pause
 
@@ -177,6 +177,8 @@ dialog --title "Fail2Ban Installation" --yesno "Möchten Sie Fail2Ban installier
 response=$?
 case $response in
    0)
+     echo -e "${YELLOW}Fail2Ban wird installariert.${RESET}"
+     clear
      install_fail2ban ;; # Benutzer hat "Ja" ausgewählt, Fail2Ban wird installiert und konfiguriert
    1) echo -e "${GREEN}Fail2Ban wird nicht installiert.${RESET}" ;; # Benutzer hat "Nein" ausgewählt, das Skript wird fortgesetzt
    255) echo -e "${YELLOW}Abbruch.${RESET}" ;; # Benutzer hat Abbruch ausgewählt
