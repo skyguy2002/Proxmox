@@ -103,9 +103,6 @@ pause
 echo "Schritt 12: Skript abgeschlossen."
 dialog --title "Skript abgeschlossen" --yesno "Das Skript wurde abgeschlossen. Möchten Sie das System herunterfahren?" 10 50
 
-# Lösche das Konsolenfenster nach dem Dialog
-clear
-
 # Überprüft die Antwort auf die Benutzerabfrage
 response=$?
 case $response in
@@ -114,3 +111,5 @@ case $response in
    255) echo "Abbruch." ;; # Benutzer hat Abbruch ausgewählt
 esac
 
+# Lösche das Konsolenfenster nach dem Dialog
+clear
