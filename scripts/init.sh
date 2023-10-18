@@ -57,9 +57,6 @@ EOF
   echo -e "${BLUE}Schritt 12: Fail2Ban wurde installiert und konfiguriert.${RESET}"
 }
 
-# Benutzerabfrage, ob Fail2Ban installiert werden soll
-dialog --title "Fail2Ban Installation" --yesno "Möchten Sie Fail2Ban installieren und konfigurieren? Dies hilft bei der Sicherung Ihres Servers, indem fehlgeschlagene Anmeldeversuche überwacht werden." 0 0
-
 response=$?
 case $response in
    0)
