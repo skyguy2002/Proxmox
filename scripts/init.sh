@@ -5,10 +5,16 @@ echo "Schritt 1: Aktualisiere die Paketquellen..."
 sudo apt update > /dev/null 2>&1
 echo "Schritt 1: Aktualisierung abgeschlossen."
 
+# Setze die Umgebungsvariable DEBIAN_FRONTEND auf noninteractive
+export DEBIAN_FRONTEND=noninteractive
+
 # Führt ein Upgrade der installierten Pakete durch und zeigt dabei die Pakete an, die aktualisiert werden
 echo "Schritt 2: Führe ein Upgrade der installierten Pakete durch..."
-sudo apt upgrade -y
+sudo apt upgrade -y > /dev/null 2>&1
 echo "Schritt 2: Upgrade abgeschlossen."
+
+# Lösche die DEBIAN_FRONTEND-Umgebungsvariable
+unset DEBIAN_FRONTEND
 
 # Entfernt nicht mehr benötigte Pakete
 echo "Schritt 3: Entferne nicht mehr benötigte Pakete..."
