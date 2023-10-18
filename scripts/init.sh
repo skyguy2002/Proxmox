@@ -84,7 +84,6 @@ export DEBIAN_FRONTEND=noninteractive
 # Zeigt die Anzahl der zu aktualisierenden Pakete an (ohne das Upgrade durchzuführen)
 update_count=$(sudo apt-get -s upgrade > /dev/null 2>&1 | grep "aktualisiert,")
 echo -e "${BLUE}Schritt 2: Anzahl der zu aktualisierenden Pakete: $update_count ${RESET}"
-pause
 
 # Überprüfe, ob Upgrades verfügbar sind ggf. installiert
 update_count=$(sudo apt-get -s upgrade > /dev/null 2>&1 | grep "aktualisiert,")
