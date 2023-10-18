@@ -223,6 +223,25 @@ fi
 echo -e "${GREEN}===== Skript abgeschlossen =====${RESET}"
 pause
 
+# Benutzerabfrage, ob Autoupdate aktiviert werden soll
+dialog --title "Autoupdate aktivieren" --yesno "Möchten Sie Autoupdate aktivieren? Wenn ja, werden wöchentliche Updates automatisch Samstags um 00:00 Uhr durchgeführt." 0 0
+
+response=$?
+case $response in
+  0)
+    echo -e "${YELLOW}Autoupdate wird aktiviert.${RESET}"
+    sudo mkdir -p /opt/update/
+    sudo curl -o /opt/update/update-script.sh https://test.test/update-script.sh
+    chmod +x /opt/update/update-script.sh
+    (crontab -l ; echo "0 0 * * 6 /opt/update/update-script.sh") | crontab -
+    echo -e "${BLUE}Autoupdate aktiviert.${RESET}"
+    ;;
+  1)
+    echo -e "${GREEN}Autoupdate wird nicht aktiviert.${RESET}" ;;
+  255)
+    echo -e "${YELLOW}Abbruch.${RESET}" ;;
+esac
+
 # Informiere den Benutzer über die Aktivierung des QEMU-Agents
 dialog --title "QEMU-Agent in Proxmox aktivieren" --msgbox "Bitte stellen Sie sicher,dass der QEMU-Agent in Proxmox aktiviert wird, um eine reibungslose Kommunikation mit dem Gastsystem zu ermöglichen." 0 0
 
