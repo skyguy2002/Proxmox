@@ -2,17 +2,17 @@
 
 # Führt ein Update der Paketquellen durch
 echo "Schritt 1: Aktualisiere die Paketquellen..."
-sudo apt update
+sudo apt update > /dev/null 2>&1
 echo "Schritt 1: Aktualisierung abgeschlossen."
 
 # Führt ein Upgrade der installierten Pakete durch und zeigt dabei die Pakete an, die aktualisiert werden
 echo "Schritt 2: Führe ein Upgrade der installierten Pakete durch..."
-sudo apt upgrade -V
+sudo apt upgrade -Y > /dev/null 2>&1
 echo "Schritt 2: Upgrade abgeschlossen."
 
 # Entfernt nicht mehr benötigte Pakete
 echo "Schritt 3: Entferne nicht mehr benötigte Pakete..."
-sudo apt autoremove
+sudo apt autoremove > /dev/null 2>&1
 echo "Schritt 3: Bereinigung abgeschlossen."
 
 # Installiert das Paket linux-virtual und alle empfohlenen Pakete
@@ -47,7 +47,7 @@ echo "Schritt 9: Aktualisierung abgeschlossen."
 
 # Führt ein erneutes Update der Paketquellen durch
 echo "Schritt 10: Erneuere die Paketquellen..."
-sudo apt update
+sudo apt update > /dev/null 2>&1
 echo "Schritt 10: Aktualisierung abgeschlossen."
 
 # Installiert das Paket qemu-guest-agent
