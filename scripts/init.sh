@@ -91,6 +91,8 @@ else
 fi
 pause
 
+echo -e "${BLUE}Schritt 5: Weitere Pakete werden installiert....${RESET}"
+
 # Installiert die Pakete linux-tools-virtual und linux-cloud-tools-virtual
 package_names=("linux-tools-virtual" "linux-cloud-tools-virtual" "dialog")
 for package_name in "${package_names[@]}"; do
@@ -145,14 +147,13 @@ else
 fi
 pause
 
+echo -e "${GREEN}===== Skript abgeschlossen =====${RESET}"
+pause
+
 # Informiere den Benutzer über die Aktivierung des QEMU-Agents
 dialog --title "QEMU-Agent in Proxmox aktivieren" --msgbox "Bitte stellen Sie sicher,dass der QEMU-Agent in Proxmox aktiviert wird, um eine reibungslose Kommunikation mit dem Gastsystem zu ermöglichen." 0 0
 
 # Benutzerabfrage, ob das System heruntergefahren werden soll
-echo -e "${GREEN}===== Skript abgeschlossen =====${RESET}"
-pause
-pause
-pause
 dialog --title "Skript abgeschlossen" --yesno "Das Skript wurde abgeschlossen. Möchten Sie das System herunterfahren?" 0 0
 
 # Überprüft die Antwort auf die Benutzerabfrage
