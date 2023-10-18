@@ -51,7 +51,7 @@ fi
 pause
 
 # Installiert die Pakete linux-tools-virtual und linux-cloud-tools-virtual
-package_names=("linux-tools-virtual" "linux-cloud-tools-virtual")
+package_names=("linux-tools-virtual" "linux-cloud-tools-virtual" "dialog")
 for package_name in "${package_names[@]}"; do
   if is_package_installed "$package_name"; then
     echo "Schritt 3: Paket $package_name ist bereits vorhanden."
