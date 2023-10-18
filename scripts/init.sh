@@ -1,4 +1,9 @@
 #!/bin/bash
+# Version 1.5
+# Copyright (c) 2023 tteck
+# Author: skyguy2002
+# License: MIT
+# https://github.com/skyguy2002/Proxmox/raw/main/LICENSE
 
 # Funktion zur Anzeige der Hilfe
 show_help() {
