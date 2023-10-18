@@ -91,7 +91,6 @@ autoremove() {
   fi
 }
 
-
 #==============Ab hier startet das Skript==============
 
 # Prüfe, ob der Parameter "?" oder "help" übergeben wurde
@@ -208,15 +207,18 @@ else
   # Benutzerabfrage, ob Fail2Ban installiert werden soll
   dialog --title "Fail2Ban Installation" --yesno "Möchten Sie Fail2Ban installieren und konfigurieren? Dies hilft bei der Sicherung Ihres Servers, indem fehlgeschlagene Anmeldeversuche überwacht werden." 0 0
 
-response=$?
-case $response in
-   0)
-     echo -e "${YELLOW}Fail2Ban wird installariert.${RESET}"
-     clear
-     install_fail2ban ;; # Benutzer hat "Ja" ausgewählt, Fail2Ban wird installiert und konfiguriert
-   1) echo -e "${GREEN}Fail2Ban wird nicht installiert.${RESET}" ;; # Benutzer hat "Nein" ausgewählt, das Skript wird fortgesetzt
-   255) echo -e "${YELLOW}Abbruch.${RESET}" ;; # Benutzer hat Abbruch ausgewählt
-esac
+  response=$?
+  case $response in
+    0)
+      echo -e "${YELLOW}Fail2Ban wird installariert.${RESET}"
+      clear
+      install_fail2ban ;; # Benutzer hat "Ja" ausgewählt, Fail2Ban wird installiert und konfiguriert
+    1)
+      echo -e "${GREEN}Fail2Ban wird nicht installiert.${RESET}" ;; # Benutzer hat "Nein" ausgewählt, das Skript wird fortgesetzt
+    255)
+      echo -e "${YELLOW}Abbruch.${RESET}" ;; # Benutzer hat Abbruch ausgewählt
+  esac
+fi
 
 echo -e "${GREEN}===== Skript abgeschlossen =====${RESET}"
 pause
@@ -230,13 +232,14 @@ dialog --title "Skript abgeschlossen" --yesno "Das Skript wurde abgeschlossen. M
 # Überprüft die Antwort auf die Benutzerabfrage
 response=$?
 case $response in
-   0)
-     echo -e "${YELLOW}Der Server wird heruntergefahren.${RESET}"
-     clear
-     sudo shutdown -h now ;; # Benutzer hat "Ja" ausgewählt, das System wird heruntergefahren
-   1) 
-     echo -e "${GREEN}Das System bleibt eingeschaltet.${RESET}" ;; # Benutzer hat "Nein" ausgewählt, das Skript wird beendet
-   255) echo -e "${YELLOW}Abbruch.${RESET}" ;; # Benutzer hat Abbruch ausgewählt
+  0)
+    echo -e "${YELLOW}Der Server wird heruntergefahren.${RESET}"
+    clear
+    sudo shutdown -h now ;; # Benutzer hat "Ja" ausgewählt, das System wird heruntergefahren
+  1)
+    echo -e "${GREEN}Das System bleibt eingeschaltet.${RESET}" ;; # Benutzer hat "Nein" ausgewählt, das Skript wird beendet
+  255)
+    echo -e "${YELLOW}Abbruch.${RESET}" ;; # Benutzer hat Abbruch ausgewählt
 esac
 
 # Lösche das Konsolenfenster nach dem Dialog
