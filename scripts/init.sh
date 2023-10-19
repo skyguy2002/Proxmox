@@ -1,5 +1,5 @@
 #!/bin/bash
-# Version 1.5
+# Version 1.6
 # Copyright (c) 2023 tteck
 # Author: skyguy2002
 # License: MIT
@@ -37,6 +37,22 @@ check_fail2ban_installed() {
   fi
 }
 
+# Funktion zur Überprüfung, ob Docker installiert ist
+check_docker_installed() {
+  if dpkg -l | grep -q "docker"; then
+    docker_installed=true
+  else
+    docker_installed=false
+  fi
+}
+
+# Funktion zur Installation von Docker
+install_docker() {
+  echo -e "${BLUE}Schritt 13: Installiere Fail2Ban und richte eine Grundkonfiguration ein.${RESET}"
+  sudo curl -sSL https://get.docker.com/ | CHANNEL=stable sh > /dev/null 2>&1
+  echo -e "${BLUE}Schritt 13: Fail2Ban wurde installiert und konfiguriert.${RESET}"
+}
+
 # Funktion zur Installation von Fail2Ban und Konfiguration
 install_fail2ban() {
   echo -e "${BLUE}Schritt 13: Installiere Fail2Ban und richte eine Grundkonfiguration ein.${RESET}"
@@ -61,6 +77,7 @@ EOF
 
   echo -e "${BLUE}Schritt 13: Fail2Ban wurde installiert und konfiguriert.${RESET}"
 }
+
 
 # Funktion für die Pausen
 pause() {
@@ -234,6 +251,27 @@ else
       echo -e "${YELLOW}Abbruch.${RESET}" ;; # Benutzer hat Abbruch ausgewählt
   esac
 fi
+
+# Überprüfen, ob Docker installiert ist
+check_docker_installed
+if $docker_installed; then
+  echo -e "${YELLOW}Docker ist bereits installiert. Die Installation wird übersprungen.${RESET}"
+else
+  # Benutzerabfrage, ob Docker installiert werden soll
+  dialog --title "Docker Installation" --yesno "Möchten Sie Docker installieren und konfigurieren?" 0 0
+  response=$?
+  case $response in
+    0)
+      echo -e "${YELLOW}Docker wird installariert.${RESET}"
+      clear
+      install_docker ;; # Benutzer hat "Ja" ausgewählt, Docker wird installiert und konfiguriert
+    1)
+      echo -e "${GREEN}Docker wird nicht installiert.${RESET}" ;; # Benutzer hat "Nein" ausgewählt, das Skript wird fortgesetzt
+    255)
+      echo -e "${YELLOW}Abbruch.${RESET}" ;; # Benutzer hat Abbruch ausgewählt
+  esac
+fi
+
 
 echo -e "${GREEN}===== Skript abgeschlossen =====${RESET}"
 pause
