@@ -111,19 +111,11 @@ pause
 # Setze die Umgebungsvariable DEBIAN_FRONTEND auf noninteractive
 export DEBIAN_FRONTEND=noninteractive
 
-# Zeigt die Anzahl der zu aktualisierenden Pakete an (ohne das Upgrade durchzuführen)
-update_count=$(sudo apt-get -s upgrade > /dev/null 2>&1 | grep "aktualisiert,")
-echo -e "${BLUE}Schritt 2: Anzahl der zu aktualisierenden Pakete: $update_count ${RESET}"
+# Führt ein Upgrade der Paketquellen durch
+echo -e "${BLUE}Schritt 2: Führe ein Upgrade der installierten Pakete durch, um die Systemstabilität und Sicherheit zu gewährleisten.${RESET}"
+sudo apt-get upgrade -y > /dev/null 2>&1
+echo -e "${BLUE}Schritt 2: Upgrade der installierten Pakete abgeschlossen.${RESET}"
 
-# Überprüfe, ob Upgrades verfügbar sind ggf. installiert
-update_count=$(sudo apt-get -s upgrade > /dev/null 2>&1 | grep "aktualisiert,")
-if [ -z "$update_count" ]; then
-  echo -e "${YELLOW}Keine Upgrades verfügbar. Der Schritt 2 wird übersprungen.${RESET}"
-else
-  echo -e "${BLUE}Schritt 2: Führe ein Upgrade der installierten Pakete durch, um die Systemstabilität und Sicherheit zu gewährleisten.${RESET}"
-  sudo apt-get upgrade -y > /dev/null 2>&1
-  echo -e "${BLUE}Schritt 2: Upgrade der installierten Pakete abgeschlossen.${RESET}"
-fi
 
 # Lösche die DEBIAN_FRONTEND-Umgebungsvariable
 unset DEBIAN_FRONTEND
