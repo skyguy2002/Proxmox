@@ -262,7 +262,7 @@ else
   response=$?
   case $response in
     0)
-      echo -e "${YELLOW}Docker wird installariert.${RESET}"
+      echo -e "${YELLOW}Docker wird installiert.${RESET}"
       clear
       install_docker ;; # Benutzer hat "Ja" ausgewählt, Docker wird installiert und konfiguriert
     1)
